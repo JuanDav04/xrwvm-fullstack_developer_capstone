@@ -4,7 +4,6 @@ import "./Dealers.css";
 import "../assets/style.css";
 import Header from '../Header/Header';
 
-
 const PostReview = () => {
   const [dealer, setDealer] = useState({});
   const [review, setReview] = useState("");
@@ -76,14 +75,24 @@ const PostReview = () => {
   }
 
   const get_cars = async ()=>{
-    const res = await fetch(carmodels_url, {
-      method: "GET"
-    });
-    const retobj = await res.json();
-    
+    try {
+        const res = await fetch(carmodels_url, {
+            method: "GET"
+        });
+
+    const text = await res.text();
+
+    console.log("Respuesta get_cars:", text);
+
+    const retobj = JSON.parse(text);
+
     let carmodelsarr = Array.from(retobj.CarModels)
     setCarmodels(carmodelsarr)
+
+  } catch (error) {
+    console.error("Error cargando carros:", error);
   }
+}
   useEffect(() => {
     get_dealer();
     get_cars();
