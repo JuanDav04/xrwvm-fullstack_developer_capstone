@@ -1,42 +1,33 @@
-# Uncomment the required imports before adding the code
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth import logout
-from django.contrib import messages
-from datetime import datetime
-from .restapis import get_request, analyze_review_sentiments, post_review
 from django.http import JsonResponse
-from django.contrib.auth import login, authenticate
-import logging
-import json
+from django.contrib.auth.models import User
+from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.csrf import csrf_exempt
+from .restapis import get_request, analyze_review_sentiments, post_review
 from .populate import initiate
 from .models import CarMake, CarModel
+import json
+import logging
 
-# Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
-# Create your views here.
 def get_cars(request):
-    count = CarMake.objects.filter().count()
-    print("CarMake count: ", count)
+    count = CarMake.objects.count()
 
     if count == 0:
         initiate()
 
-    car_models = CarModel.objects.select_related('car_make').all()
+    car_models = CarModel.objects.select_related("car_make")
 
-    cars = []
-    for car_model in car_models:
-        cars.append({
-            "CarModel": car_model.name,
-            "CarMake": car_model.car_make.name
-        })
+    cars = [
+        {
+            "CarModel": car.name,
+            "CarMake": car.car_make.name
+        }
+        for car in car_models
+    ]
 
-    return JsonResponse({"CarModels ": cars})
+    return JsonResponse({"CarModels": cars})
 
 
 # Create a `login_request` view to handle sign in request
