@@ -40,12 +40,12 @@ def login_user(request):
     # Try to check if provide credential can be authenticated
     user = authenticate(username=username, password=password)
     data = {"userName": username}
-	
+
     if user is not None:
         # If user is valid, call login method to login current user
         login(request, user)
         data = {"userName": username, "status": "Authenticated"}
-		
+	
     return JsonResponse(data)
 
 
@@ -95,13 +95,15 @@ def registration(request):
 # a list of dealerships
 #Update the `get_dealerships` render list of dealerships all by default, particular state if state is passed
 def get_dealerships(request, state="All"):
-	
+
     if(state == "All"):
         endpoint = "/fetchDealers"
     else:
         endpoint = "/fetchDealers/" + state
     dealerships = get_request(endpoint)
-    return JsonResponse({"status": 200, "dealers": dealerships})
+    return JsonResponse({"status": 200,
+						 "dealers": dealerships
+						})
 
 
 def get_dealer_reviews(request, dealer_id):
@@ -117,9 +119,11 @@ def get_dealer_reviews(request, dealer_id):
 
                 review_detail['sentiment'] = "neutral"
 
-        return JsonResponse({"status": 200, "reviews": reviews})
+        return JsonResponse({"status": 200,
+							 "reviews": reviews})
     else:
-        return JsonResponse({"status": 400, "message": "Bad Request"})
+        return JsonResponse({"status": 400,
+							 "message": "Bad Request"})
 
 
 def get_dealer_details(request, dealer_id):
@@ -130,9 +134,11 @@ def get_dealer_details(request, dealer_id):
         if isinstance(dealership, dict):
             dealership = [dealership]
 
-        return JsonResponse({"status": 200, "dealer": dealership})
+        return JsonResponse({"status": 200,
+							 "dealer": dealership})
     else:
-        return JsonResponse({"status": 400, "message": "Bad Request"})
+        return JsonResponse({"status": 400,
+							 "message": "Bad Request"})
 
 
 def add_review(request):
@@ -141,7 +147,9 @@ def add_review(request):
         try:
             response = post_review(data)
             return JsonResponse({"status": 200})
-        except:
-            return JsonResponse({"status": 401, "message": "Error in posting review"})
+		except Exception:
+            return JsonResponse({"status": 401,
+								 "message": "Error in posting review"})
     else:
-        return JsonResponse({"status": 403, "message": "Unauthorized"})
+        return JsonResponse({"status": 403,
+							 "message": "Unauthorized"})
