@@ -45,7 +45,7 @@ def login_user(request):
         # If user is valid, call login method to login current user
         login(request, user)
         data = {"userName": username, "status": "Authenticated"}
-	
+    
     return JsonResponse(data)
 
 
@@ -102,8 +102,8 @@ def get_dealerships(request, state="All"):
         endpoint = "/fetchDealers/" + state
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200,
-						 "dealers": dealerships
-						})
+                         "dealers": dealerships
+                        })
 
 
 def get_dealer_reviews(request, dealer_id):
@@ -120,10 +120,10 @@ def get_dealer_reviews(request, dealer_id):
                 review_detail['sentiment'] = "neutral"
 
         return JsonResponse({"status": 200,
-							 "reviews": reviews})
+                             "reviews": reviews})
     else:
         return JsonResponse({"status": 400,
-							 "message": "Bad Request"})
+                             "message": "Bad Request"})
 
 
 def get_dealer_details(request, dealer_id):
@@ -135,10 +135,10 @@ def get_dealer_details(request, dealer_id):
             dealership = [dealership]
 
         return JsonResponse({"status": 200,
-							 "dealer": dealership})
+                             "dealer": dealership})
     else:
         return JsonResponse({"status": 400,
-							 "message": "Bad Request"})
+                             "message": "Bad Request"})
 
 
 def add_review(request):
@@ -147,9 +147,9 @@ def add_review(request):
         try:
             response = post_review(data)
             return JsonResponse({"status": 200})
-		except Exception:
+        except Exception:
             return JsonResponse({"status": 401,
-								 "message": "Error in posting review"})
+                                 "message": "Error in posting review"})
     else:
         return JsonResponse({"status": 403,
-							 "message": "Unauthorized"})
+                             "message": "Unauthorized"})
