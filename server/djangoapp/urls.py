@@ -20,7 +20,7 @@ urlpatterns = [
     # path for logout
     path(route='logout',
          view=views.logout_request,
-         name='logout
+         name='logout'
          ),
     # path for get cars
     path(route='get_cars',
