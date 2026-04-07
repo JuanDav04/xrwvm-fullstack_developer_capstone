@@ -45,7 +45,7 @@ def login_user(request):
         # If user is valid, call login method to login current user
         login(request, user)
         data = {"userName": username, "status": "Authenticated"}
-    
+
     return JsonResponse(data)
 
 
@@ -81,7 +81,7 @@ def registration(request):
             last_name=last_name,
             password=password,
             email=email
-        )
+  )
 
         login(request, user)
 
